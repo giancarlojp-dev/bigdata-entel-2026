@@ -1,0 +1,28 @@
+# Entorno virtual Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Variables de entorno (contienen credenciales)
+.env
+
+# Datos crudos y procesados (volumen grande)
+data/raw/osiptel/*.csv
+data/raw/osiptel/*.xlsx
+data/raw/synthetic/*.csv
+data/raw/synthetic/*.json
+data/processed/*.parquet
+
+# Power BI
+powerbi/*.pbix
+
+# VS Code
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs de Airflow
+airflow/logs/
