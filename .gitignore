@@ -26,3 +26,17 @@ Thumbs.db
 
 # Logs de Airflow
 airflow/logs/
+
+# Archivos de Windows
+desktop.ini
+
+# Archivos de documentación compilados (si usas MkDocs o similares)
+site/
+
+# Notebooks sin limpiar (opcional, solo outputs)
+.ipynb_checkpoints/
+
+# Archivos grandes o comprimidos
+*.zip
+*.tar.gz
+*.7zj
