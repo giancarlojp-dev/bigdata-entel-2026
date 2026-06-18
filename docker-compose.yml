@@ -1,0 +1,67 @@
+# Nota: Quité la línea version: "3.8" porque Docker Compose moderno ya la considera obsoleta.
+
+services:
+  # ─────────────────────────────────────────
+  # PostgreSQL — Base de metadatos de Airflow
+  # ─────────────────────────────────────────
+  postgres:
+    image: postgres:15
+    container_name: entel_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+
+  # ─────────────────────────────────────────
+  # MongoDB Community — Base de datos NoSQL
+  # ─────────────────────────────────────────
+  mongodb:
+    image: mongo:7.0
+    container_name: entel_mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: entel_bigdata
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # ─────────────────────────────────────────
+  # Apache Airflow — Orquestación de pipelines
+  # ─────────────────────────────────────────
+  airflow-webserver:
+    image: apache/airflow:2.8.0
+    container_name: entel_airflow
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__WEBSERVER__SECRET_KEY=entel2026secret
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - airflow_logs:/opt/airflow/logs
+    # SOLUCIÓN AQUÍ: Comando en una sola línea limpia para evitar errores de parseo en Windows
+    command: bash -c "airflow db init && airflow users create --username airflow --firstname Gian --lastname J --role Admin --email admin@entel.com --password airflow && airflow webserver"
+
+# Al final del archivo debes declarar los volúmenes que usaste arriba para persistir los datos
+volumes:
+  postgres_data:
+  mongo_data:
+  airflow_logs:
