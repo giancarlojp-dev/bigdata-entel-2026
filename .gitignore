@@ -12,7 +12,7 @@ data/raw/osiptel/*.csv
 data/raw/osiptel/*.xlsx
 data/raw/synthetic/*.csv
 data/raw/synthetic/*.json
-data/processed/*.parquet
+data/processed/**/*.parquet
 
 # Power BI
 powerbi/*.pbix
@@ -39,4 +39,9 @@ site/
 # Archivos grandes o comprimidos
 *.zip
 *.tar.gz
-*.7zj
+*.7z
+
+# Metadatos locales de Spark
+derby.log
+metastore_db/
+spark-warehouse/
