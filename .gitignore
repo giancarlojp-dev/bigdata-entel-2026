@@ -45,3 +45,6 @@ site/
 derby.log
 metastore_db/
 spark-warehouse/
+
+# Base de datos local y logs de Airflow
+airflow/airflow.db
