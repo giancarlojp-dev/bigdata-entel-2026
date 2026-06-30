@@ -48,3 +48,7 @@ spark-warehouse/
 
 # Base de datos local y logs de Airflow
 airflow/airflow.db
+# Metadata local de Airflow (SQLite)
+airflow/airflow.db-journal
+airflow/webserver_config.py
+airflow/standalone_admin_password.txt

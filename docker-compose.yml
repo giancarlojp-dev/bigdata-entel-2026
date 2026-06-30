@@ -21,7 +21,7 @@ services:
   # Apache Airflow — Webserver (interfaz UI)
   # ─────────────────────────────────────────
   airflow-webserver:
-    image: apache/airflow:2.8.0
+    image: apache/airflow:2.8.0-python3.11
     container_name: entel_airflow_web
     restart: always
     environment:
@@ -42,8 +42,10 @@ services:
       - ./scripts:/opt/airflow/scripts
       - ./data:/opt/airflow/data
       - ./airflow:/opt/airflow/config
+      - ./requirements-airflow.txt:/requirements-airflow.txt
       - airflow_logs:/opt/airflow/logs
-    command: webserver
+    command: >
+      bash -c "pip install --no-cache-dir -r /requirements-airflow.txt && airflow webserver"
     depends_on:
       - mongodb
 
@@ -51,7 +53,7 @@ services:
   # Apache Airflow — Scheduler (ejecuta los DAGs)
   # ─────────────────────────────────────────
   airflow-scheduler:
-    image: apache/airflow:2.8.0
+    image: apache/airflow:2.8.0-python3.11
     container_name: entel_airflow_scheduler
     restart: always
     environment:
@@ -68,8 +70,10 @@ services:
       - ./scripts:/opt/airflow/scripts
       - ./data:/opt/airflow/data
       - ./airflow:/opt/airflow/config
+      - ./requirements-airflow.txt:/requirements-airflow.txt
       - airflow_logs:/opt/airflow/logs
-    command: scheduler
+    command: >
+      bash -c "pip install --no-cache-dir -r /requirements-airflow.txt && airflow scheduler"
     depends_on:
       - mongodb
       - airflow-webserver
